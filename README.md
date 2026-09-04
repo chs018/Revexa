@@ -23,7 +23,7 @@ Demo Video Link: [https://drive.google.com/file/d/1DljecSCn_UEBngugaTV7nC4izATpJ
 - [Results](#results)
 - [Completeness — the end-to-end experience](#completeness)
 - [Limitations & scope](#limitations--scope)
-- [What broke, and how we recovered](#what-broke-and-how-we-recovered)
+- [What broke, and how I recovered](#what-broke-and-how-I-recovered)
 - [Getting started](#getting-started)
 - [Project structure](#project-structure)
 
@@ -330,7 +330,7 @@ Stated plainly, not defensively:
 - The business-value projection uses explicitly labeled assumed rates
   (monthly dispute volume, hourly ops cost), not Razorpay-provided data.
 
-## What broke, and how we recovered
+## What broke, and how I recovered
 
 - Prisma Migration Issue: prisma migrate dev detected differences between the actual database and Prisma’s migration history and offered to reset the entire database, which could have deleted existing demo data. This happened because some previous migrations had been applied manually using SQL but were never recorded in Prisma’s _prisma_migrations table. We cancelled the reset, manually applied the required ALTER TABLE changes, and added the missing migration records so the database and Prisma’s migration history were consistent again.
 - Classifier Training Issue: train_classifier.py crashed because the database had only four labeled disputes, with one class having only a single example, which was not enough for scikit-learn to perform a stratified train/test split. We generated 30 additional synthetic disputes using the existing demo endpoint, bringing the total to 33 labeled examples with a balanced 54.5%/45.5% class distribution, and then retrained the classifier successfully.
