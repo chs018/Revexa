@@ -1,0 +1,12 @@
+node_modules/
+.env
+dist/
+build/
+*.log
+
+# Python venv for scripts/ml/ — regenerate with `pip install -r requirements.txt`.
+# dataset.csv, model.joblib, and ml-metrics.json are NOT ignored — they're
+# committed deliberately, for reproducibility (see README's ML section).
+server/scripts/ml/venv/
+server/scripts/ml/__pycache__/
+*.pyc

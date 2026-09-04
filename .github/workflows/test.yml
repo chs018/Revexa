@@ -1,0 +1,104 @@
+name: Test
+
+# Part C: on every push and pull request, spin up a real Postgres, apply the
+# schema, and run the full server test suite — fails the workflow (and, on
+# a PR, the check) on any test failure. Deliberately mirrors what
+# server/tests/setup.js and lib/prisma.js already enforce locally: the test
+# suite runs against its own database (TEST_DATABASE_URL), genuinely
+# separate from the "app" database (DATABASE_URL) that migrate deploy
+# targets — never the same connection string, same guard as local dev.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: revexa
+        ports:
+          - 5432:5432
+        # Wait for Postgres to actually accept connections before any step
+        # below tries to use it — migrate deploy/tests would otherwise race
+        # a container that's still starting up.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/revexa
+      # A second database on the SAME service container — created explicitly
+      # below, since POSTGRES_DB only provisions one database at container
+      # startup. Genuinely separate from DATABASE_URL, same as the real Neon
+      # revexa_test database used locally (see tests/setup.js /
+      # lib/prisma.js) — required, not just convention: lib/prisma.js throws
+      # if these two are ever equal when NODE_ENV=test.
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/revexa_test
+      # Dummy CI-only values — the test suite never makes a real Gemini or
+      # Razorpay call (riskScorer.js/evidenceAgent.js take an injected `ai`
+      # mock, and lib/razorpayContest.js is jest.mock()'d wherever /approve
+      # is exercised), but the modules that construct these clients
+      # (lib/gemini.js, lib/razorpayClient.js) still run at require() time,
+      # so the env vars need to exist even though their values are never
+      # actually used for a network call.
+      GEMINI_API_KEY: ci-dummy-key
+      RAZORPAY_KEY_ID: ci-dummy-key-id
+      RAZORPAY_KEY_SECRET: ci-dummy-key-secret
+      RAZORPAY_WEBHOOK_SECRET: ci-dummy-webhook-secret
+      CONFIDENCE_THRESHOLD: '0.65'
+      RISK_BAND_MARGIN: '0.15'
+      HIGH_VALUE_CUTOFF: '999900'
+      MAX_RETRY_ATTEMPTS: '3'
+      CHARGEBACK_FEE: '1500'
+      TOTAL_TXN_VOLUME: '20000'
+      DISPUTE_RATIO_WARNING: '0.01'
+      REVIEW_PIN: '4721'
+      MIN_REVIEW_SECONDS: '3'
+      ASSUMED_MONTHLY_DISPUTE_VOLUME: '50'
+      ASSUMED_MINUTES_PER_MANUAL_REVIEW: '15'
+      ASSUMED_HOURLY_OPS_COST: '800'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Create test database
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE DATABASE revexa_test;'
+
+      - name: Generate Prisma client
+        working-directory: server
+        run: npx prisma generate
+
+      - name: Apply migrations to the app database
+        working-directory: server
+        run: npx prisma migrate deploy
+
+      - name: Apply migrations to the test database
+        working-directory: server
+        # Tests query TEST_DATABASE_URL (see lib/prisma.js), not
+        # DATABASE_URL — it needs the same schema, so migrate deploy runs a
+        # second time against it specifically.
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+
+      - name: Run tests
+        working-directory: server
+        run: npm test

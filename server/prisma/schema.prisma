@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DisputeStatus {
+  new
+  scored
+  drafted
+  pending_review
+  submitted
+  won
+  lost
+  needs_attention
+}
+
+enum EvidencePacketStatus {
+  draft
+  approved
+  rejected
+  submitted
+}
+
+model Dispute {
+  id               String          @id @default(uuid())
+  razorpayId       String          @unique
+  amount           Int
+  currency         String          @default("INR")
+  reasonCode       String
+  status           DisputeStatus   @default(new)
+  slaDeadline      DateTime
+  confidenceScore  Float?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  // Synthetic transaction context (Day 3) — generated once by the risk
+  // scorer on first scoring pass and persisted here so re-scoring the same
+  // dispute reuses the same context instead of regenerating random values.
+  deliveryStatus       String?
+  priorRefundCount     Int?
+  ipMatch              Boolean?
+  billingAddressMatch  Boolean?
+
+  // Day 6: "what actually happened" in our synthetic world — set at
+  // creation time by the seed script / demo trigger, completely independent
+  // of anything the risk scorer concludes. Exists purely so /metrics can
+  // grade the model's verdict after the fact; riskScorer.js must never read
+  // this field or let it reach a prompt. Null for real Razorpay-sourced
+  // disputes, where we have no way of knowing the true outcome in advance.
+  groundTruthDefensible Boolean?
+
+  // Additive, separate from the flat fields above (which stay exactly as
+  // riskScorer.js uses them) — three distinct evidence artifacts
+  // (transactionLog, deliveryConfirmation, communicationTrail) used only by
+  // evidenceAgent.js, generated consistently with deliveryStatus etc. by
+  // the same generator (see lib/transactionContext.js + lib/evidenceContext.js).
+  evidenceContext  Json?
+
+  // Razorpay buildathon integration: set ONLY when this dispute is backed by
+  // a genuine Razorpay test-mode payment (created via POST /demo/create-order
+  // + real Checkout + POST /demo/record-real-payment — see routes/demo.js).
+  // Null for every other dispute (seeded fixtures, synthetic
+  // trigger-dispute calls, real webhook-sourced ones without this flow).
+  // When present, riskScorer.js/evidenceAgent.js fetch the real payment
+  // record from Razorpay's Payments API (lib/razorpayPayment.js) and cite it
+  // as evidence — this is the one field that turns "a dispute" into
+  // "a dispute Razorpay's own dashboard can also show you."
+  razorpayPaymentId String?
+
+  // Part [model-disagreement]: the baseline classifier's own independent
+  // read on this dispute, stored whenever mlClassifier.js runs — regardless
+  // of whether it agreed with the LLM's verdict. Both null if the
+  // classifier was never trained (predictClassifier returns null) or this
+  // dispute predates this field.
+  classifierScore   Float?
+  classifierVerdict String?
+
+  // Part [review-gate]: server-side timestamp for the mandatory dwell
+  // period before /disputes/:id/approve is allowed to succeed — set by
+  // POST /disputes/:id/start-review, checked (and cleared on success) by
+  // /approve. Null means "no review in progress." See ApprovalGate.jsx for
+  // the client-side mirror of this same gate.
+  reviewStartedAt   DateTime?
+
+  evidencePacket   EvidencePacket?
+  auditLogs        AuditLog[]
+}
+
+model EvidencePacket {
+  id        String                @id @default(uuid())
+  disputeId String                @unique
+  content   String
+  status    EvidencePacketStatus  @default(draft)
+  createdAt DateTime              @default(now())
+
+  // GAP 4: rules-based cross-check (verifyEvidence.js) run right after
+  // evidenceAgent.js produces its draft, before this row is written —
+  // "verified" if every cited artifact both exists in evidenceContext and
+  // genuinely supports the case, "flagged" if any cited artifact is either
+  // missing or contradicts the underlying data (e.g. citing delivery proof
+  // when deliveryConfirmation.status is "not_delivered"). Null only for
+  // EvidencePacket rows written before this field existed. Never null for
+  // anything drafted after verifyEvidence.js was wired in — draftEvidence()
+  // always sets one or the other, it never leaves this unset.
+  verificationStatus String?
+
+  dispute   Dispute               @relation(fields: [disputeId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  disputeId String
+  actor     String
+  action    String
+  reasoning String?
+  createdAt DateTime @default(now())
+
+  dispute   Dispute  @relation(fields: [disputeId], references: [id])
+}

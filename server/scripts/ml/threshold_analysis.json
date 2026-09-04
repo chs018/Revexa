@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-08-26T08:19:41.426414+00:00",
+  "datasetSize": 204,
+  "testSetSize": 41,
+  "chargebackFee": 1500,
+  "sweep": [
+    {
+      "threshold": 0.5,
+      "confusionMatrix": {
+        "tp": 8,
+        "fp": 8,
+        "tn": 13,
+        "fn": 12
+      },
+      "precision": 0.5,
+      "recall": 0.4,
+      "f1": 0.4444,
+      "falsePositiveCost": 5111200,
+      "falseNegativeCost": 4748800,
+      "totalCost": 9860000
+    },
+    {
+      "threshold": 0.55,
+      "confusionMatrix": {
+        "tp": 7,
+        "fp": 6,
+        "tn": 15,
+        "fn": 13
+      },
+      "precision": 0.5385,
+      "recall": 0.35,
+      "f1": 0.4242,
+      "falsePositiveCost": 4358400,
+      "falseNegativeCost": 5098700,
+      "totalCost": 9457100
+    },
+    {
+      "threshold": 0.6,
+      "confusionMatrix": {
+        "tp": 2,
+        "fp": 1,
+        "tn": 20,
+        "fn": 18
+      },
+      "precision": 0.6667,
+      "recall": 0.1,
+      "f1": 0.1739,
+      "falsePositiveCost": 1001400,
+      "falseNegativeCost": 7443200,
+      "totalCost": 8444600
+    },
+    {
+      "threshold": 0.65,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    },
+    {
+      "threshold": 0.7,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    },
+    {
+      "threshold": 0.75,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    },
+    {
+      "threshold": 0.8,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    },
+    {
+      "threshold": 0.85,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    },
+    {
+      "threshold": 0.9,
+      "confusionMatrix": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 21,
+        "fn": 20
+      },
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "falsePositiveCost": 0,
+      "falseNegativeCost": 8093000,
+      "totalCost": 8093000
+    }
+  ],
+  "chosenConfidenceThreshold": {
+    "value": 0.65,
+    "totalCost": 8093000,
+    "precision": 0.0,
+    "recall": 0.0,
+    "rationale": "Of the 9 candidate thresholds swept (0.50-0.90 in steps of 0.05), 0.65 minimizes total cost (falsePositiveCost + falseNegativeCost, amount + CHARGEBACK_FEE per false positive) at 8093000 on the held-out test set \u2014 not the threshold with the best F1 or accuracy alone, since cost is what actually matters here."
+  },
+  "riskBandMargin": {
+    "overallDisagreementRate": 0.4878,
+    "bands": {
+      "0.05": {
+        "width": 0.05,
+        "sampleSize": 3,
+        "disagreementRate": 0.6667,
+        "ratioToOverall": 1.367,
+        "meaningfullyElevated": false
+      },
+      "0.1": {
+        "width": 0.1,
+        "sampleSize": 13,
+        "disagreementRate": 0.5385,
+        "ratioToOverall": 1.104,
+        "meaningfullyElevated": false
+      },
+      "0.15": {
+        "width": 0.15,
+        "sampleSize": 16,
+        "disagreementRate": 0.5,
+        "ratioToOverall": 1.025,
+        "meaningfullyElevated": false
+      }
+    },
+    "chosenMargin": 0.15,
+    "rationale": "No band cleared the 1.15x elevation bar with at least 8 cases \u2014 defaulted to the widest candidate (+/-0.15) rather than under-cover genuinely uncertain cases."
+  },
+  "highValueCutoff": {
+    "value": 999900,
+    "percentile": 90,
+    "datasetSize": 204,
+    "rationale": "90th percentile of dispute amounts across the full labeled dataset (not just the held-out test split) \u2014 disputes above this cutoff are the top 10% by value, where a wrong auto-decision is disproportionately costly, so they're routed to a human regardless of confidence score."
+  },
+  "warnings": [
+    "6 thresholds (0.65, 0.7, 0.75, 0.8, 0.85, 0.9) tie for the lowest total cost (8093000) \u2014 recall is 0 at every one of them, so this isn't a real optimum, it's the point where the model stops predicting 'defensible' at all. Usually means the swept feature set has weak signal relative to how groundTruthDefensible was actually generated \u2014 see docs/threshold-rationale.md.",
+    "Highest predicted probability on the test set is 0.638 \u2014 predictions rarely reach high confidence in either direction, consistent with weak feature signal."
+  ]
+}

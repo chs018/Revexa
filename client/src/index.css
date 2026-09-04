@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@theme {
+  /* Signal colors — UNCHANGED across the visual system replacement. These
+     carry meaning (supports/weakens/critical), not brand decoration, so
+     they're explicitly out of scope for the restyle. */
+  --color-success-50: #f0f5f2;
+  --color-success-100: #dbe8e0;
+  --color-success-600: #3f7a5c;
+  --color-success-700: #2f5e46;
+
+  --color-caution-50: #fbf4e6;
+  --color-caution-100: #f5e6c6;
+  --color-caution-600: #a86c1d;
+  --color-caution-700: #8a5716;
+
+  --color-danger-50: #fdf1f1;
+  --color-danger-100: #f8dcdc;
+  --color-danger-600: #b8433f;
+  --color-danger-700: #953633;
+
+  /* Terracotta — reserved for needs_attention + genuine errors (see
+     statusStyles.js's BADGE_CLASSES.critical). A single value, not a scale
+     like the three above — carried over unchanged from the prior visual
+     system, but was dropped by mistake when this file was rewritten for
+     the porcelain/cobalt pass, which silently broke the needs_attention
+     badge (bg-(--color-critical)/text-(--color-critical) resolved to
+     nothing — no fill, no text color — rendering as a blank pill). Fixed
+     here; regenerate and re-check the Queue table's Needs Attention rows
+     after this change. */
+  --color-critical: #c2412d;
+
+  /* Porcelain/paper/graphite/hairline/cobalt system — replaces the prior
+     ink-navy/brand/sidebar palette entirely. Every --color-brand*,
+     --color-surface, --color-sidebar-*, and --color-ink-* token from that
+     pass is gone, not aliased — nothing below reuses those names. */
+  --color-porcelain: #fafaf9; /* page background, sidebar background — the whole app is light now */
+  --color-paper: #ffffff; /* card and panel surfaces */
+  --color-graphite: #1a1b1e; /* primary text */
+  --color-graphite-muted: #6b6d76; /* secondary/caption text */
+  --color-hairline: #e4e4e7; /* 1px borders/dividers — the separator, not shadows */
+
+  /* Cobalt — the one accent color. Deliberately just one scale (no
+     "brand"/"brand-hover" pair) so there's only one interactive color to
+     reach for, not a choice between two. */
+  --color-cobalt-50: #edf0fc;
+  --color-cobalt-100: #dbe3fa;
+  --color-cobalt-600: #2d4fd6;
+  --color-cobalt-700: #2440ad;
+
+  /* Fonts — Space Grotesk for display/headings, Inter for UI body text
+     (overrides Tailwind's default font-sans), JetBrains Mono for IDs/
+     timestamps/amounts (overrides default font-mono). --font-display has
+     no Tailwind-builtin utility name to override, so it's additive:
+     generates font-display. */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Sidebar-only: transparent glassy panel, Crystal Blue (#5CB3FF).
+     Additive — a new token, not a revival of the removed
+     --color-sidebar-*/--color-brand* names from the prior (now-deleted)
+     visual system. Leaves porcelain/paper/graphite/hairline/cobalt above
+     untouched. */
+  --color-sidebar-glass: rgba(92, 179, 255, 0.55);
+}
+
+/* --color-graphite has the same Tailwind v4 grouping quirk the old
+   --color-brand/--color-sidebar-text tokens had (documented in the prior
+   pass, kept here because the underlying framework behavior is unchanged):
+   --color-graphite-muted shares "graphite" as an exact prefix, so v4 groups
+   both into one scale and — having done so — does NOT auto-generate the
+   bare text-graphite/bg-graphite utility, only the -muted one. Confirmed by
+   inspecting compiled output, not assumed. Redeclared here as a plain
+   custom property and consumed via arbitrary-value syntax (e.g.
+   text-(--color-graphite)) wherever the bare token is needed. */
+:root {
+  --color-graphite: #020202;
+  /* --color-critical needs the same treatment — this exact redeclaration
+     existed in the pre-porcelain codebase (confirmed working there) and
+     was lost in the rewrite along with the @theme declaration above. */
+  --color-critical: #c2412d;
+  /* --color-sidebar-glass has the same problem as --color-graphite above,
+     for a different reason: it's only ever referenced via var() inside the
+     hand-written .sidebar-glass rule below, never as a bg-sidebar-glass
+     utility candidate anywhere in JSX — Tailwind's tree-shaking only keeps
+     @theme tokens it sees a matching utility candidate for, so a
+     var()-only reference gets silently dropped from the compiled output.
+     Confirmed by inspecting compiled output, not assumed. */
+  --color-sidebar-glass: #83bfef;
+}
+
+body {
+  background: var(--color-porcelain);
+  color: var(--color-graphite);
+  font-family: var(--font-sans);
+}
+
+/* Tabular figures wherever numbers need to line up in a column (Queue,
+   Metrics, money figures) — a utility class rather than repeating the
+   font-feature-settings arbitrary value at every call site. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes feed-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-feed-in {
+  animation: feed-item-in 320ms ease-out;
+}
+
+/* PART C — verification stamp. The checkmark <path> is drawn with
+   pathLength="1" (see VerificationStamp.jsx), which makes the dash math
+   trivial regardless of the path's actual geometry: dasharray is always 1,
+   and animating dashoffset 1 -> 0 draws the full stroke exactly once. */
+@keyframes stamp-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.stamp-check-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0; /* at-rest default: fully drawn, no animation */
+}
+
+.stamp-check-path--animate {
+  animation: stamp-draw 480ms ease-out forwards;
+}
+
+/* Sidebar glass panel — plain CSS (not stacked Tailwind utilities) so the
+   -webkit- prefix (Safari) is guaranteed to ship alongside the unprefixed
+   backdrop-filter property. */
+.sidebar-glass {
+  background: var(--color-sidebar-glass);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}

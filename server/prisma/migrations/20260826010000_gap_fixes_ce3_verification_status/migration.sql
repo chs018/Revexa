@@ -1,0 +1,17 @@
+-- GAP 4: rules-based evidence verification (verifyEvidence.js) needs
+-- somewhere to record its result. See schema.prisma for the field comment.
+--
+-- Applied by hand via $executeRawUnsafe (scripts/apply-gap-migration.js),
+-- same reason as the prior migration in this history: the
+-- schema-engine-windows.exe binary is blocked by Windows Application
+-- Control (Smart App Control) on this machine. The query-engine path used
+-- by all normal Prisma Client calls, including this ALTER via
+-- $executeRawUnsafe, is unaffected. This file exists so `prisma migrate
+-- deploy`/`migrate status` still see an accurate history in any
+-- environment where the schema engine isn't blocked.
+--
+-- No new columns needed for GAP 1's CE 3.0 evidence (ce3Evidence lives
+-- inside the existing Dispute.evidenceContext JSONB column) or GAP 2's cost
+-- model (env-var driven, computed on read in the /metrics routes) — this
+-- migration is scoped to exactly the one schema change GAP 4 requires.
+ALTER TABLE "EvidencePacket" ADD COLUMN IF NOT EXISTS "verificationStatus" TEXT;

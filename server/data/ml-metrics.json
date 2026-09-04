@@ -1,0 +1,32 @@
+{
+  "model": "LogisticRegression",
+  "generatedAt": "2026-08-30T06:57:15.106880+00:00",
+  "datasetSize": 33,
+  "trainSetSize": 26,
+  "testSetSize": 7,
+  "classBalance": {
+    "trueCount": 18,
+    "falseCount": 15,
+    "truePct": 54.5
+  },
+  "testSetClassBalance": {
+    "trueCount": 4,
+    "falseCount": 3,
+    "truePct": 57.1
+  },
+  "confusionMatrix": {
+    "tp": 3,
+    "fp": 3,
+    "tn": 0,
+    "fn": 1
+  },
+  "precision": 0.5,
+  "recall": 0.75,
+  "falsePositiveCost": 704200,
+  "falseNegativeCost": 49900,
+  "chargebackFee": 1500,
+  "costNote": "Same raw-amount-sum convention as GET /metrics \u2014 mixed currencies (INR paise, USD cents) summed without FX conversion, not real dollar amounts. falsePositiveCost includes CHARGEBACK_FEE (1500) per false-positive case, on top of the disputed amount \u2014 same formula GET /metrics uses, so the two are genuinely comparable.",
+  "warnings": [
+    "Only 33 rows \u2014 fewer than the recommended 150. Precision/recall below are likely noisy; generate more data before trusting them."
+  ]
+}

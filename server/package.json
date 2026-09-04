@@ -1,0 +1,39 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "migrate": "prisma migrate dev",
+    "seed": "node prisma/seed.js",
+    "export-dataset": "node scripts/export-dataset.js",
+    "test": "jest --runInBand"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@google/genai": "^2.18.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "p-limit": "^3.1.0",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.23.0",
+    "razorpay": "^2.9.8",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "jest": "^30.5.0",
+    "prisma": "^7.9.1",
+    "supertest": "^7.2.2"
+  }
+}

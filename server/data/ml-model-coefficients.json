@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-08-30T06:57:15.109128+00:00",
+  "model": "LogisticRegression",
+  "numericFeatures": [
+    "amount",
+    "logAmount",
+    "priorRefundCount"
+  ],
+  "numericScaling": {
+    "mean": [
+      240284.61538461538,
+      11.993302293662872,
+      1.3846153846153846
+    ],
+    "scale": [
+      249237.00134658313,
+      0.8668433961140068,
+      1.076923076923077
+    ]
+  },
+  "numericCoefficients": [
+    -0.09085473674701881,
+    -0.12095371475226627,
+    -0.059945566231209835
+  ],
+  "booleanFeatures": [
+    "ipMatch",
+    "billingAddressMatch",
+    "hasPriorRefund"
+  ],
+  "booleanCoefficients": [
+    0.44983540540992645,
+    0.7642455466159064,
+    -0.2889400984555069
+  ],
+  "categoricalFeatures": {
+    "reasonCode": {
+      "categories": [
+        "duplicate_charge",
+        "goods_not_received",
+        "product_not_as_described",
+        "unauthorized_transaction"
+      ],
+      "coefficients": [
+        0.12194862441331453,
+        1.0023992918068947,
+        -0.6541294605814832,
+        -0.47089561368334265
+      ]
+    },
+    "currency": {
+      "categories": [
+        "INR",
+        "USD"
+      ],
+      "coefficients": [
+        -0.1514969084488284,
+        0.1508197504042119
+      ]
+    },
+    "deliveryStatus": {
+      "categories": [
+        "delivered",
+        "delivery_unconfirmed",
+        "in_transit",
+        "not_delivered"
+      ],
+      "coefficients": [
+        -0.16826745711526792,
+        0.3567656384375303,
+        0.19896382326560727,
+        -0.38813916263248616
+      ]
+    }
+  },
+  "intercept": -0.3447228905651589
+}
