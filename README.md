@@ -1,4 +1,4 @@
-# Revexa <img width="50" height="50" alt="image" src="https://github.com/user-attachments/assets/49fe8193-a2ef-4d0e-8572-cd73e583ee25" />
+# Revexa 💸
 
 
 **AI-assisted chargeback evidence response for Razorpay merchants.**
