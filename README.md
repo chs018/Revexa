@@ -2,8 +2,7 @@
 
 
 **AI-assisted chargeback evidence response for Razorpay merchants.**
-
-Built for the Razorpay AI Buildathon : Track 3, AI Revenue Recovery.
+Built for the Razorpay AI Buildathon : Track 2, AI Risk Manager.
 Deployed URL: [https://revexa-1.onrender.com/] 
 
 Demo Video Link: [https://drive.google.com/file/d/1DljecSCn_UEBngugaTV7nC4izATpJeqN/view?usp=sharing]
