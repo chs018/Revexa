@@ -77,7 +77,7 @@ submitted.
 | Criterion | Weight | Where to look |
 |---|---|---|
 | **Innovation** | 30% | Dual-model disagreement routing, evidence modeled on Visa's actual Compelling Evidence 3.0 rule, verification against underlying data rather than prompt-only anti-fabrication, empirically-derived (not guessed) threshold values — see [Innovation](#innovation) |
-| **Technical Execution** | 30% | Every guardrail enforced server-side and independently verified (not just tested through the UI), automated test suite + CI, real-time architecture with no polling, idempotent webhook handling — see [System Architecture](#system-architecture) and [Guardrails](#guardrails) |
+| **Technical Execution** | 30% | Every guardrail enforced server-side and independently verified (not just tested through the UI), automated test suite + CI, real-time architecture with no polling, idempotent webhook handling, see [System Architecture](#system-architecture) and [Guardrails](#guardrails) |
 | **Business Value** | 20% | Concrete cost model (dispute amount + chargeback fee + reputational-risk proxy), money-defended and hours-saved figures computed from real data, not asserted — see [Business Value](#business-value) |
 | **Completeness** | 20% | Full pipeline running live end to end, five polished pages, real-time updates throughout, deployed and smoke-tested on the actual production URL — see [Completeness](#completeness) |
 
