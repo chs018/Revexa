@@ -233,7 +233,7 @@ just assumed from the implementation plan:
 
 ## Results
 
-**ML Model (Classifier): Results**
+## ML Model (Classifier): Results
 
 | Metric | Result |
 |--------|--------|
@@ -241,13 +241,13 @@ just assumed from the implementation plan:
 | Precision | 0.50 |
 | Recall | 0.75 |
 
-**Gemini Model : Scoring metrics**
+## Gemini Model : Scoring metrics
 
-### 1. Scoring
+**1. Scoring**
 
 The Gemini model generates a `verdict` indicating whether a dispute is **defensible**. Its predictions are compared against the `groundTruthDefensible` label.
 
-#### Confusion Matrix Terms
+**Confusion Matrix Terms**
 
 | Term | Meaning |
 |------|---------|
@@ -256,7 +256,7 @@ The Gemini model generates a `verdict` indicating whether a dispute is **defensi
 | **FN (False Negative)** | Gemini predicted `not defensible`, but the dispute was actually defensible. |
 | **TN (True Negative)** | Gemini predicted `not defensible` and the dispute was actually not defensible. |
 
-#### Metrics
+**Metrics**
 
 | Metric | Formula | Meaning |
 |--------|---------|---------|
@@ -267,7 +267,7 @@ The Gemini model generates a `verdict` indicating whether a dispute is **defensi
 
 > **Note:** No representment fee is included in the false-negative cost because the dispute was never filed.
 
-### 2. Evidence Drafting & Verification
+**2. Evidence Drafting & Verification**
 
 The Gemini-generated evidence packets are processed through `evidenceAgent.js` and checked by `verifyEvidence.js`.
 
