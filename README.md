@@ -51,7 +51,7 @@ submitted.
 
 1. A dispute arrives via a signature-verified, idempotent webhook.
 2. An LLM-based risk scorer (Gemini) evaluates whether the case is
-   defensible, returning a structured score and named signals — not a
+   defensible, returning a structured score and named signals, not a
    black-box number.
 3. A separately **trained classifier** (logistic regression, fit on a
    held-out train/test split) independently scores the same case. If the
@@ -167,14 +167,14 @@ Risk scorer (Gemini) scores + explains  ⟷  Trained classifier scores independe
 ### Real-time layer
 
 All live updates (Dashboard, Queue, Audit Trail) are pushed via Socket.io
-at the moment a dispute's state actually changes — there is no polling
+at the moment a dispute's state actually changes, there is no polling
 anywhere in this application. Verified by confirming two simultaneously
 open browser tabs both update from a single triggered event, and by
 confirming the client reconnects cleanly after a dropped connection.
 
 ### Data model
 
-Three core tables — `Dispute`, `EvidencePacket`, `AuditLog` — plus derived
+Three core tables : `Dispute`, `EvidencePacket`, `AuditLog` , plus derived
 fields added as the guardrails matured: `confidenceScore`,
 `classifierScore` and `classifierVerdict` (the independent trained-model
 result), `verificationStatus` (anti-fabrication check outcome),
@@ -226,7 +226,7 @@ just assumed from the implementation plan:
   
 - It compounds with Shield rather than duplicating it. Shield stops fraud before the transaction; Revexa handles what happens after a dispute is filed anyway , legitimate transactions that get disputed regardless of how good pre-transaction screening is. Different stage of the same problem, genuinely complementary.
   
-- The 25% resolution-time figure becomes your benchmark, not your competitor. If a merchant's evidence is auto-assembled the moment a dispute lands instead of waiting in a queue for manual attention, there's a real argument this improves on that existing number — worth saying carefully as "a potential improvement on" rather than claiming it outright, since you haven't measured against Razorpay's real pipeline.
+- The 25% resolution-time figure becomes your benchmark, not your competitor. If a merchant's evidence is auto-assembled the moment a dispute lands instead of waiting in a queue for manual attention, there's a real argument this improves on that existing number , worth saying carefully as "a potential improvement on" rather than claiming it outright, since you haven't measured against Razorpay's real pipeline.
 
 
 ---
@@ -304,7 +304,7 @@ Five pages, all live-updating via the same real-time event stream:
 - **Metrics** : both scoring methods' honest performance, side by side.
 
 Deliberately out of scope: login/signup (a shared reviewer PIN plus
-server-enforced dwell time substitutes for full auth at MVP scope — see
+server-enforced dwell time substitutes for full auth at MVP scope , see
 below), Redis-backed job queues, and monitoring/alerting infrastructure,
 none of these demonstrate agent judgment, which is what this build is
 actually about.
