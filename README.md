@@ -12,7 +12,7 @@ Deployed URL: [https://revexa-1.onrender.com/]
 
 - [The problem](#the-problem)
 - [What Revexa does](#what-revexa-does)
-- [How this maps to the judging rubric](#how-this-maps-to-the-judging-rubric)
+- [How This Aligns With the Project Requirements](#How-This-Aligns-With-the-Project-Requirements)
 - [Innovation](#innovation)
 - [System architecture](#system-architecture)
 - [Guardrails — what "bounded and gated" actually means here](#guardrails)
@@ -69,7 +69,7 @@ submitted.
 
 ---
 
-## How this maps to the judging rubric
+## How This Aligns With the Project Requirements
 
 | Criterion | Weight | Where to look |
 |---|---|---|
