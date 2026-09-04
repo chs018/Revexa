@@ -89,7 +89,7 @@ signal.** Most AI-assisted review tools ship one model and ask you to
 trust it. Revexa runs a prompted LLM and a separately fitted classifier
 side by side. When they agree, that agreement is itself evidence the
 decision is sound. When they disagree, the case is automatically pulled
-into human review — using model disagreement as a risk signal, not just
+into human review, using model disagreement as a risk signal, not just
 displaying two numbers next to each other.
 
 **2. Evidence modeled on actual network rules, not invented categories.**
@@ -98,7 +98,7 @@ implements Visa's real Compelling Evidence 3.0 requirement: two prior
 undisputed transactions, 120–365 days old, matching at least two of four
 data elements (user ID, IP address, shipping address, device ID), with at
 least one match being IP or device ID. This qualification check runs in
-code against the data — the LLM is told the qualification result, it
+code against the data, the LLM is told the qualification result, it
 doesn't determine it. For other reason codes, evidence categories use
 general industry terminology rather than asserting network-specific field
 names we couldn't independently verify , an explicit choice to stay
