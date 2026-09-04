@@ -31,7 +31,7 @@ Demo Video Link: [https://drive.google.com/file/d/1DljecSCn_UEBngugaTV7nC4izATpJ
 ## The problem
 
 When a customer disputes a charge with their bank, the merchant has a short,
-hard deadline , often 7 to 21 days — to submit evidence proving the
+hard deadline , often 7 to 21 days to submit evidence proving the
 transaction was legitimate. Miss it, or submit weak evidence, and the
 merchant automatically loses the disputed amount plus a chargeback fee,
 regardless of whether the transaction was actually fraudulent.
@@ -56,15 +56,15 @@ submitted.
    held-out train/test split) independently scores the same case. If the
    two disagree, the case is automatically routed to human review rather
    than trusting either one alone.
-4. For defensible cases, an evidence-drafting agent assembles a rebuttal —
+4. For defensible cases, an evidence-drafting agent assembles a rebuttal,
    using evidence categories modeled on the actual card-network evidence
    requirements where those requirements are well-documented (see
    [Innovation](#innovation)).
 5. Before anything reaches a human, a separate verification step checks
    that every piece of evidence the draft cites is actually supported by
-   the underlying data — flagging the draft if it isn't.
+   the underlying data,flagging the draft if it isn't.
 6. A human reviews and approves or rejects. This is the only path to
-   submission in the entire codebase — there is no auto-submit anywhere,
+   submission in the entire codebase, there is no auto-submit anywhere,
    at any confidence level.
 7. Every step, by every actor (model, agent, or human), is written to an
    append-only audit trail.
