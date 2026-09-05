@@ -175,7 +175,7 @@ confirming the client reconnects cleanly after a dropped connection.
 
 The dispute data is real time stored in the test mode razorpay 
 
-<img width="959" height="469" alt="image" src="https://github.com/user-attachments/assets/31cc4fa4-9c57-44f2-85d2-0d64a2bbaf1e" />
+<img width="300" height="350" alt="image" src="https://github.com/user-attachments/assets/31cc4fa4-9c57-44f2-85d2-0d64a2bbaf1e" />
 
 
 ### Data model
