@@ -138,7 +138,7 @@ use case.
 | CI | GitHub Actions |
 | Deployment | Railway/Render (backend), Vercel (frontend) |
 
-<img width="428" height="466" alt="image" src="https://github.com/user-attachments/assets/427eaf22-665b-4f35-8775-03decca6577e" />
+<img width="400" height="350" alt="image" src="https://github.com/user-attachments/assets/427eaf22-665b-4f35-8775-03decca6577e" />
 
 ### Pipeline
 
