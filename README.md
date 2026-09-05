@@ -173,10 +173,6 @@ anywhere in this application. Verified by confirming two simultaneously
 open browser tabs both update from a single triggered event, and by
 confirming the client reconnects cleanly after a dropped connection.
 
-The dispute data is real time stored in the test mode razorpay 
-
-<img width="959" height="469" alt="image" src="https://github.com/user-attachments/assets/effa7816-bbda-4c0e-b050-18d16eb635dc" />
-
 
 ### Data model
 
