@@ -1,0 +1,10 @@
+Copyright (c) 2026 Harshini Shree C. All rights reserved.
+
+This repository and its contents are submitted exclusively for the Razorpay AI Buildathon 2026. 
+
+Strictly Prohibited:
+- Copying, modifying, replicating, or creating derivative works of this project.
+- Distributing, hosting, or using this code for any commercial or non-commercial purposes.
+- Re-submitting this code, or parts of it, to the Razorpay Buildathon or any other hackathon.
+
+Permission is granted solely to the Razorpay Buildathon evaluation panel to clone, run, and review this software for judging purposes.
